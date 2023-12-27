@@ -3,9 +3,9 @@
 // 参考: https://blog.csdn.net/XiaoXiaoPengBo/article/details/73742242
 
 void FLASH_Init(void) {
-    uint32_t addr = FLASH_SECTOR_8;
-    addr = FLASH_SECTOR_3;
-    addr = FLASH_SECTOR_4;
+    uint32_t addr = FLASH_SECTOR_ADDR_8;
+    addr = FLASH_SECTOR_ADDR_3;
+    addr = FLASH_SECTOR_ADDR_4;
     char buf[] = "This is a test flash program.";
     for (uint8_t i = 0; i < strlen(buf); i++) {
         FLASH_WriteByte(addr + i, buf[i]);
@@ -17,17 +17,17 @@ void FLASH_Init(void) {
 
 uint8_t FLASH_GetSectorNum(uint32_t addr) {
     uint8_t ret;
-    if (addr < FLASH_SECTOR_1) ret = 0;
-    else if (addr < FLASH_SECTOR_2) ret = 1;
-    else if (addr < FLASH_SECTOR_3) ret = 2;
-    else if (addr < FLASH_SECTOR_4) ret = 3;
-    else if (addr < FLASH_SECTOR_5) ret = 4;
-    else if (addr < FLASH_SECTOR_6) ret = 5;
-    else if (addr < FLASH_SECTOR_7) ret = 6;
-    else if (addr < FLASH_SECTOR_8) ret = 7;
-    else if (addr < FLASH_SECTOR_9) ret = 8;
-    else if (addr < FLASH_SECTOR_10)ret = 9;
-    else if (addr < FLASH_SECTOR_11)ret = 10;
+    if (addr < FLASH_SECTOR_ADDR_1) ret = 0;
+    else if (addr < FLASH_SECTOR_ADDR_2) ret = 1;
+    else if (addr < FLASH_SECTOR_ADDR_3) ret = 2;
+    else if (addr < FLASH_SECTOR_ADDR_4) ret = 3;
+    else if (addr < FLASH_SECTOR_ADDR_5) ret = 4;
+    else if (addr < FLASH_SECTOR_ADDR_6) ret = 5;
+    else if (addr < FLASH_SECTOR_ADDR_7) ret = 6;
+    else if (addr < FLASH_SECTOR_ADDR_8) ret = 7;
+    else if (addr < FLASH_SECTOR_ADDR_9) ret = 8;
+    else if (addr < FLASH_SECTOR_ADDR_10)ret = 9;
+    else if (addr < FLASH_SECTOR_ADDR_11)ret = 10;
     else ret = 11;
     return ret;
 }

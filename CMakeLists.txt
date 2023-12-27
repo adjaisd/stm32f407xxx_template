@@ -53,6 +53,11 @@ FILE(GLOB C_DRIVER_FILES Drivers/STM32F4xx_HAL_Driver/Src/*.c)
 FILE(GLOB CXX_DRIVER_FILES Drivers/STM32F4xx_HAL_Driver/Src/*.cpp)
 FILE(GLOB C_USER_FILES Core/Src/*.c)
 FILE(GLOB CXX_USER_FILES Core/Src/*.cpp)
+FILE(GLOB_RECURSE LWIP_FILES
+        LWIP/*.c LWIP/*.cpp
+        Middlewares/Third_Party/LwIP/*.c Middlewares/Third_Party/LwIP/*.cpp
+        Drivers/BSP/Components/dp83848/*.c Drivers/BSP/Components/dp83848/*.cpp
+)
 
 # 链接脚本配置
 set(SRC_LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F407VGTX_FLASH_IAP.ld)
@@ -73,17 +78,25 @@ target_sources(
         PUBLIC startup_stm32f407vgtx.s  # 不采用MDK-ARM目录下的.s文件，是由于编译器不一样
         PUBLIC ${DST_LINKER_SCRIPT}     # 链接脚本作为源文件，否则在链接中报错未定义
         PUBLIC ${C_DRIVER_FILES} ${CXX_DRIVER_FILES}
+        PUBLIC ${LWIP_FILES}
         PRIVATE ${C_USER_FILES} ${CXX_USER_FILES}
 )
 
 # 头文件
 target_include_directories(
-        ${PROJECT_NAME}.elf
-        PUBLIC Drivers/CMSIS/Include Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/STM32F4xx_HAL_Driver/Inc
+        ${PROJECT_NAME}.elf PUBLIC
+        Drivers/CMSIS/Include
+        Drivers/CMSIS/Device/ST/STM32F4xx/Include
+        Drivers/STM32F4xx_HAL_Driver/Inc
+        Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
+        Drivers/BSP/Components/dp83848
+        LWIP/App LWIP/Target
+        Middlewares/Third_Party/LwIP/src/include
+        Middlewares/Third_Party/LwIP/system
         PRIVATE Core/Inc
 )
 
-add_definitions(-DDEBUG -DUSE_FULL_LL_DRIVER -DHSE_VALUE=25000000 -DHSE_STARTUP_TIMEOUT=100 -DLSE_STARTUP_TIMEOUT=5000 -DLSE_VALUE=32768 -DEXTERNAL_CLOCK_VALUE=12288000 -DHSI_VALUE=16000000 -DLSI_VALUE=32000 -DVDD_VALUE=3300 -DPREFETCH_ENABLE=1 -DINSTRUCTION_CACHE_ENABLE=1 -DDATA_CACHE_ENABLE=1 -DSTM32F407xx)
+add_definitions(-DDEBUG -DUSE_FULL_LL_DRIVER -DHSE_VALUE=25000000 -DHSE_STARTUP_TIMEOUT=100 -DLSE_STARTUP_TIMEOUT=5000 -DLSE_VALUE=32768 -DEXTERNAL_CLOCK_VALUE=12288000 -DHSI_VALUE=16000000 -DLSI_VALUE=32000 -DVDD_VALUE=3300 -DPREFETCH_ENABLE=1 -DINSTRUCTION_CACHE_ENABLE=1 -DDATA_CACHE_ENABLE=1 -DSTM32F407xx -DTEST_STEP=3)
 
 # 获取头文件搜索路径
 #get_property(INC_DIRS DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)

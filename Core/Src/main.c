@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dma.h"
+#include "lwip.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
@@ -78,14 +79,7 @@ int main(void) {
     /* MCU Configuration--------------------------------------------------------*/
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-    LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
-    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
-
-    /* System interrupt init*/
-    NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-
-    /* SysTick_IRQn interrupt configuration */
-    NVIC_SetPriority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 15, 0));
+    HAL_Init();
 
     /* USER CODE BEGIN Init */
 
@@ -104,6 +98,7 @@ int main(void) {
     MX_TIM7_Init();
     MX_USART1_UART_Init();
     MX_SPI1_Init();
+    MX_LWIP_Init();
     /* USER CODE BEGIN 2 */
 
 #if TEST_STEP == 3
@@ -232,8 +227,12 @@ void SystemClock_Config(void) {
     while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL) {
 
     }
-    LL_Init1msTick(168000000);
     LL_SetSystemCoreClock(168000000);
+
+    /* Update the time base */
+    if (HAL_InitTick(TICK_INT_PRIORITY) != HAL_OK) {
+        Error_Handler();
+    }
 }
 
 /* USER CODE BEGIN 4 */
