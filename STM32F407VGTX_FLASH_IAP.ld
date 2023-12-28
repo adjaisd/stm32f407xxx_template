@@ -49,7 +49,7 @@ MEMORY
   RAM    (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
 #include "config.h"
 #if (TEST_STEP == 9) && (USE_IAP == 1)
-  FLASH    (rx)    : ORIGIN = 0x8004000,   LENGTH = 1008K
+  FLASH    (rx)    : ORIGIN = APP_FLASH_ORIGIN,   LENGTH = 1008K
 #else
   FLASH    (rx)    : ORIGIN = 0x8000000,   LENGTH = 1024K
 #endif

@@ -69,9 +69,9 @@ void SystemClock_Config(void);
 int main(void) {
     /* USER CODE BEGIN 1 */
 #if (TEST_STEP == 9) && (USE_IAP == 1)
-    SCB->VTOR = FLASH_BASE | 0x4000;
+    SCB->VTOR = APP_FLASH_ORIGIN;
 #elif TEST_STEP == 10
-    uint32_t addr = FLASH_BASE | 0x4000;
+    uint32_t addr = APP_FLASH_ORIGIN;
     iap_load_app(addr);
 #endif
     /* USER CODE END 1 */

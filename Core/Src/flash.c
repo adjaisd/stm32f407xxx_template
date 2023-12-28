@@ -34,20 +34,20 @@ uint8_t FLASH_GetSectorNum(uint32_t addr) {
 
 void FLASH_SectorErase(uint8_t sec_num) {
     while ((FLASH->SR & FLASH_SR_BSY) == FLASH_SR_BSY); // 等待BSY位被清除
-    if (sec_num > 11 || sec_num < 0) return;
+    if (sec_num > 11) return;
     CLEAR_BIT(FLASH->ACR, FLASH_ACR_DCEN);      // 关闭数据缓存使能
 
     // 开启SER
     SET_BIT(FLASH->CR, FLASH_CR_SER);           // 激活扇区擦除
 
-    // 配置PSIZE，并行位数，电压3.3V，配置为0b10
-    MODIFY_REG(FLASH->CR, 0b11 << FLASH_CR_PSIZE_Pos, 0b10 << FLASH_CR_PSIZE_Pos);
-    //FLASH->CR &= (~(0b11 << FLASH_CR_PSIZE_Pos));   // 清零
-    //FLASH->CR |= (0b10 << FLASH_CR_PSIZE_Pos);
+    // 配置PSIZE，并行位数，电压3.3V，配置为0x2
+    MODIFY_REG(FLASH->CR, 0x3 << FLASH_CR_PSIZE_Pos, 0x2 << FLASH_CR_PSIZE_Pos);
+    //FLASH->CR &= (~(0x3 << FLASH_CR_PSIZE_Pos));   // 清零
+    //FLASH->CR |= (0x2 << FLASH_CR_PSIZE_Pos);
 
     // 设置SNB，扇区
-    MODIFY_REG(FLASH->CR, 0b1111 << FLASH_CR_SNB_Pos, sec_num << FLASH_CR_SNB_Pos);
-    //FLASH->CR &= (~(0b1111 << FLASH_CR_SNB_Pos));   // 将SNB的3位清零
+    MODIFY_REG(FLASH->CR, 0xf << FLASH_CR_SNB_Pos, sec_num << FLASH_CR_SNB_Pos);
+    //FLASH->CR &= (~(0xf << FLASH_CR_SNB_Pos));   // 将SNB的3位清零
     //FLASH->CR |= (sec_num << FLASH_CR_SNB_Pos);
 
     // 触发擦除操作
@@ -57,8 +57,8 @@ void FLASH_SectorErase(uint8_t sec_num) {
     // 关闭SER位
     CLEAR_BIT(FLASH->CR, FLASH_CR_SER_Msk);
     //FLASH->CR &= (~FLASH_CR_SER);
-    CLEAR_BIT(FLASH->CR, 0b1111 << FLASH_CR_SNB_Pos);
-    //FLASH->CR &= (~(0b1111 << FLASH_CR_SNB_Pos));
+    CLEAR_BIT(FLASH->CR, 0xf << FLASH_CR_SNB_Pos);
+    //FLASH->CR &= (~(0xf << FLASH_CR_SNB_Pos));
 }
 
 void FLASH_MassErase(void) {
@@ -90,9 +90,9 @@ void FLASH_WriteByte(uint32_t addr, uint8_t byte) {
     SET_BIT(FLASH->CR, FLASH_CR_PG);    // CR的PG位置1，激活Flash编程
     //对所需的存储器地址（在主存储器块或OTP区域内）执行数据写入操作：
     //00 x8 编程 、01 x16 编程 、10 x32 编程、11 x64 编程
-    MODIFY_REG(FLASH->CR, 0b11 << FLASH_CR_PSIZE_Pos, 0b00 << FLASH_CR_PSIZE_Pos);
-    //FLASH->CR &= (~(0b11 << (FLASH_CR_PSIZE_Pos)));   // 将PSIZE的2位清零
-    //FLASH->CR |= (0 << FLASH_CR_PSIZE_Pos);           // x8编程
+    MODIFY_REG(FLASH->CR, 0x3 << FLASH_CR_PSIZE_Pos, 0x0 << FLASH_CR_PSIZE_Pos);
+    //FLASH->CR &= (~(0x3 << (FLASH_CR_PSIZE_Pos)));   // 将PSIZE的2位清零
+    //FLASH->CR |= (0x0 << FLASH_CR_PSIZE_Pos);           // x8编程
 
     *(__IO uint8_t *) addr = byte;
     while ((FLASH->SR & FLASH_SR_BSY) == FLASH_SR_BSY);     // 等待BSY位被清除
