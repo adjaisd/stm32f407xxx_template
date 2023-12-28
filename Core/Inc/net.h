@@ -17,6 +17,8 @@ struct name {
 
 void tcp_server_init(void);
 
+void udp_server_init(void);
+
 #ifdef __cplusplus
 };
 #endif

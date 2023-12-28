@@ -123,6 +123,7 @@ int main(void) {
     LL_GPIO_TogglePin(GPIOC, LL_GPIO_PIN_13);
 #elif TEST_STEP == 11
     tcp_server_init();
+    udp_server_init();
 #endif
 
     /* USER CODE END 2 */
