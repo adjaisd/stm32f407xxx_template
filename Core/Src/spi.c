@@ -81,6 +81,8 @@ void MX_SPI1_Init(void) {
     LL_SPI_Disable(SPI1);
 #elif  TEST_STEP == 10
     LL_SPI_Disable(SPI1);
+#elif  TEST_STEP == 11
+    LL_SPI_Disable(SPI1);
 #endif
     // ╨зблю╤╩ф╟в
     /* USER CODE END SPI1_Init 2 */

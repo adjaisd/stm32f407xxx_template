@@ -48,6 +48,7 @@ extern "C" {
 #include "common.h"
 #include "ads1255.h"
 #include "flash.h"
+#include "net.h"
 
 /* USER CODE END Includes */
 

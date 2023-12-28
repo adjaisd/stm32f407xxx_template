@@ -121,6 +121,8 @@ int main(void) {
 #elif TEST_STEP == 9
     USART1_Print("OK\r\n", strlen("OK\r\n"));
     LL_GPIO_TogglePin(GPIOC, LL_GPIO_PIN_13);
+#elif TEST_STEP == 11
+    tcp_server_init();
 #endif
 
     /* USER CODE END 2 */
@@ -186,6 +188,8 @@ int main(void) {
         i = (i >= 9) ? 0 : i + 1;
         USART1_Print(buf, strlen(buf));
         LL_mDelay(100);
+#elif TEST_STEP == 11
+        MX_LWIP_Process();
 #endif
         /* USER CODE END WHILE */
         /* USER CODE BEGIN 3 */
